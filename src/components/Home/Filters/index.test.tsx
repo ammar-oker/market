@@ -1,18 +1,33 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Filters, { CheckboxItems } from './index';
+import Filters, { CheckboxItem } from './index';
 
-const items: CheckboxItems = {
-  check1: { id: 'check1', label: 'first', checked: false },
-  check2: { id: 'check2', label: 'first and second', checked: false },
-  check3: { id: 'check3', label: 'only third', checked: false },
-};
+const items: CheckboxItem[] = [
+  {
+    id: 'check1',
+    value: 'first',
+    label: 'first',
+    checked: false,
+  },
+  {
+    id: 'check2',
+    value: 'first-second',
+    label: 'first and second',
+    checked: false,
+  },
+  {
+    id: 'check3',
+    value: 'third',
+    label: 'only third',
+    checked: false,
+  },
+];
 
 describe('Filters', () => {
   it('filter items on search', () => {
-    let filteredItems: CheckboxItems = {};
-    const handleSearchResults = (_items: CheckboxItems) => {
+    let filteredItems: CheckboxItem[] = [];
+    const handleSearchResults = (_items: CheckboxItem[]) => {
       filteredItems = _items;
     };
     render(<Filters items={items} onSearchResults={handleSearchResults} />);
@@ -24,16 +39,29 @@ describe('Filters', () => {
     // get all elements contain the word 'First' in the label
     // WITH case-insensitivity
     userEvent.type(inputEl, 'FirSt');
-    expect(filteredItems).toEqual({
-      check1: { id: 'check1', label: 'first', checked: false },
-      check2: { id: 'check2', label: 'first and second', checked: false },
-    });
+    expect(filteredItems).toEqual([
+      {
+        id: 'check1',
+        value: 'first',
+        label: 'first',
+        checked: false,
+      },
+      {
+        id: 'check2',
+        value: 'first-second',
+        label: 'first and second',
+        checked: false,
+      },
+    ]);
 
     userEvent.clear(inputEl); // clear input field
     userEvent.type(inputEl, 'third');
-    expect(filteredItems).toEqual({
-      check3: { id: 'check3', label: 'only third', checked: false },
-    });
+    expect(filteredItems).toEqual([{
+      id: 'check3',
+      value: 'third',
+      label: 'only third',
+      checked: false,
+    }]);
 
     userEvent.clear(inputEl);
     expect(filteredItems).toEqual(items);
@@ -58,10 +86,10 @@ describe('Filters', () => {
   });
 
   it('tracks selected items', () => {
-    let selectedItems: CheckboxItems = {};
+    let selectedItems: CheckboxItem[] = [];
     render(<Filters
       items={items}
-      updateSelectedItems={(e: CheckboxItems) => {
+      updateSelectedItems={(e: CheckboxItem[]) => {
         selectedItems = e;
       }}
     />);
@@ -69,9 +97,19 @@ describe('Filters', () => {
     const check2 = screen.getByTestId('check2');
     userEvent.click(check1);
     userEvent.click(check2);
-    expect(selectedItems).toEqual({
-      check1: { id: 'check1', label: 'first', checked: true },
-      check2: { id: 'check2', label: 'first and second', checked: true },
-    });
+    expect(selectedItems).toEqual([
+      {
+        id: 'check1',
+        value: 'first',
+        label: 'first',
+        checked: true,
+      },
+      {
+        id: 'check2',
+        value: 'first-second',
+        label: 'first and second',
+        checked: true,
+      },
+    ]);
   });
 });

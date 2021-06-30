@@ -14,6 +14,7 @@ const styles = {
   },
   labelText: {
     'font-size': '14px',
+    maxWidth: '80%',
   },
   checkbox: {
     '& input': {

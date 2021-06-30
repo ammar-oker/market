@@ -8,11 +8,12 @@ interface CheckboxProps {
     name?: string,
     checked?: boolean,
     className?: string,
+    disabled?: boolean,
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
 const Checkbox: FC<CheckboxProps> = ({
-  id, name = '', label = '', checked, onChange, className = '',
+  id, name = '', disabled, label = '', checked, onChange, className = '',
 }) => {
   const classes = useStyles();
 
@@ -25,7 +26,7 @@ const Checkbox: FC<CheckboxProps> = ({
   return (
     <div className={`${classes.checkbox} flex my-2 items-center ${className}`}>
       <label data-testid={id} htmlFor={id} className="flex items-center cursor-pointer text-xl">
-        <input id={id} name={name} type="checkbox" className="hidden" checked={checked} onChange={handleChange} />
+        <input disabled={disabled} id={id} name={name} type="checkbox" className="hidden" checked={checked} onChange={handleChange} />
         <div className={`${classes.square} dark:bg-primary-dark w-5 h-5 inline-block mr-2 rounded-sm flex-no-shrink`}>
           <CheckIcon className={classes.checkIcon} />
         </div>

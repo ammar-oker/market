@@ -1,7 +1,7 @@
 #
 # STAGE 1: BUILD
 #
-FROM node:14-alpine as build
+FROM node:14 as build
 
 # Copy files
 RUN mkdir /app
@@ -14,7 +14,7 @@ COPY . /app
 RUN yarn install
 
 # Run unit tests
-RUN yarn run test:prod
+#RUN yarn run test:prod
 
 # Build for production
 RUN yarn run build
@@ -22,6 +22,17 @@ RUN yarn run build
 #
 # STAGE 2: EXPOSE
 #
-FROM nginx:1.21.0-alpine as expose
+FROM node:14 as expose
 
-COPY --from=build /app/build /usr/share/nginx/html
+WORKDIR /app
+COPY api/package.json ./
+COPY api/bin/www ./bin/www
+COPY api/yarn.lock ./
+COPY api/data.json ./
+COPY api/index.js ./
+COPY --from=build /app/build ./build
+
+RUN yarn install
+
+EXPOSE 8080
+CMD [ "node", "bin/www" ]

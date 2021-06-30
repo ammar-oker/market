@@ -8,11 +8,14 @@ interface EnrichedRadioItems {
 
 interface RadioGroupProps {
   items: RadioItem[],
+  loading?: boolean,
   initialSelect?: keyof EnrichedRadioItems,
   onChange: (event: keyof EnrichedRadioItems) => void
 }
 
-const RadioGroup: FC<RadioGroupProps> = ({ items, onChange, initialSelect = '0' }: RadioGroupProps) => {
+const RadioGroup: FC<RadioGroupProps> = ({
+  items, onChange, initialSelect = '0', loading,
+}: RadioGroupProps) => {
   const selfRadios: EnrichedRadioItems = {};
   items.forEach((item) => {
     selfRadios[item.id] = { ...item, checked: item.id === initialSelect };
@@ -38,6 +41,7 @@ const RadioGroup: FC<RadioGroupProps> = ({ items, onChange, initialSelect = '0' 
                     key={radios[key].id}
                     id={radios[key].id}
                     label={radios[key].label}
+                    disabled={loading}
                     checked={radios[key].checked}
                     onChange={onRadioChange}
                   />

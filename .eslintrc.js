@@ -40,6 +40,10 @@ module.exports = {
     'react/require-default-props': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     'no-console': 'off',
+    'no-param-reassign': 'off',
+    'no-underscore-dangle': 'off',
+    camelcase: 'off',
+    'no-plusplus': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
