@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { isEqual } from 'lodash';
 import { FilterIcon, ShoppingCartIcon } from '@heroicons/react/solid';
+import axios from 'axios';
 import Sorting, { SortingItem } from './Sorting';
 import Filters, { CheckboxItem } from './Filters';
 import Cart from './Cart';
@@ -9,7 +10,6 @@ import ProductList from './Products/ProductList';
 import Pagination from './Products/Pagination';
 import { IHomeState, ServerParams } from './types';
 import './styles.css';
-import $axios from '../../axios';
 
 class Home extends Component<any, IHomeState> {
   constructor(props = {}) {
@@ -99,7 +99,7 @@ class Home extends Component<any, IHomeState> {
     const { serverParams } = this.state;
     try {
       this.setState({ loading: true });
-      const response = await $axios.get('/products/', {
+      const response = await axios.get('https://market-api2021.herokuapp.com/products/', {
         params: {
           _page: serverParams._page,
           _limit: serverParams._limit,
@@ -121,7 +121,7 @@ class Home extends Component<any, IHomeState> {
 
   fetchManufacturers = async (): Promise<void> => {
     try {
-      const response = await $axios.get('/manufacturers/');
+      const response = await axios.get('https://market-api2021.herokuapp.com/manufacturers/');
       this.setBrands(response.data.map((item: any) => ({
         id: item.id, label: item.name, value: item.slug, checked: false,
       })));
@@ -132,7 +132,7 @@ class Home extends Component<any, IHomeState> {
 
   fetchTags = async (): Promise<void> => {
     try {
-      const response = await $axios.get('/products/');
+      const response = await axios.get('https://market-api2021.herokuapp.com/products/');
       const tags: string[] = [];
       // NOTE: nested loops, huge performance issue
       response.data.forEach((item: any) => {
